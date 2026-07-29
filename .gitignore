@@ -1,0 +1,12 @@
+# системный мусор
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# локальные настройки агента (launch.json нужен всем — он остаётся)
+.claude/settings.local.json
+
+# временное
+*.tmp
+*.log
+node_modules/

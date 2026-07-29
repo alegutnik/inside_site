@@ -1,0 +1,390 @@
+/* INSIDE — весь интерактив сайта. Без библиотек. */
+
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var y = $('#year');
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* ============================================================
+     Аналитика. Работает, только если пиксель подключён в <head>.
+     ============================================================ */
+  function track(name, params) {
+    params = params || {};
+    if (typeof gtag === 'function') gtag('event', name, params);
+    if (typeof fbq === 'function') fbq('trackCustom', name, params);
+    if (typeof ttq === 'object' && ttq.track) ttq.track(name, params);
+  }
+
+  $$('[data-cta]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      track('CTAClick', { cta: el.dataset.cta, text: el.textContent.trim().slice(0, 60) });
+    });
+  });
+
+  /* ============================================================
+     ПРОГРАММА КУРСА — вкладки
+     Правки текста блоков делать здесь.
+     ============================================================ */
+  var MODULES = [
+    { n: 1, title: 'Розбір матриці: як «читати» людей, як книгу',
+      result: 'Окремо вивчаємо кожен блок матриці та починаємо розуміти причинно-наслідкові зв’язки, як вони впливають на стосунки, гроші та реалізацію',
+      points: [
+        'Вчимося знаходити підхід до будь-якої людини',
+        'Розбираємо кожен показник по суті й на прикладах — без води. Простою мовою пояснюю не лише, що означає показник, а й як це працює насправді',
+        'Перша практика: домашні завдання — не теорія про значення сектора, а можливість ЗРОЗУМІТИ й ЗАСТОСУВАТИ'
+      ],
+      tags: ['Бонусний урок'], milestone: '' },
+
+    { n: 2, title: 'Як впливати на себе та на інших за допомогою розбору матриці',
+      result: 'Зрозумієш, що насправді впливає на гроші, цілі та сімейність, а що — ні, і як допомогти собі та іншим',
+      points: [
+        'Навчишся будувати матрицю і дізнаєшся, чому люди змінюються з віком',
+        'Відповіси на запитання, чому люди поводяться саме так, що ними керує',
+        'Як керувати собою та своїми сильними й слабкими сторонами'
+      ],
+      tags: ['Бонусний урок'], milestone: '' },
+
+    { n: 3, title: 'Призначення: як зрозуміти свої задачі і знайти себе',
+      result: 'Розкриєш власний потенціал — і зможеш допомагати іншим робити те саме',
+      points: [
+        'Розберешся в різниці між числом душі та призначенням',
+        'Зможеш зазирнути «в душу» іншої людини й зрозуміти, чому вона поводиться саме так'
+      ],
+      tags: [], milestone: '' },
+
+    { n: 4, title: 'Коди: твої сильні і слабкі місця',
+      result: 'Зрозумієш свої приховані таланти та сильні сторони і зможеш допомогти їх розкрити іншим',
+      points: [
+        'Усвідомиш, де твої слабкі місця — і навчишся з ними працювати',
+        'Побачиш зв’язок між подіями у своєму житті та кодами в матриці',
+        'Точно знатимеш, яке рішення отримають твої майбутні клієнти саме від тебе'
+      ],
+      tags: ['Бонусний урок'],
+      milestone: 'Блок, після якого ти вже можеш робити перші розбори для клієнтів' },
+
+    { n: 5, title: 'Сумісність. Як налагодити стосунки з іншими',
+      result: 'Зробиш ревізію всіх своїх минулих стосунків — і побачиш, що саме й чому пішло не так',
+      points: [
+        'Зрозумієш, який партнер тобі потрібен, як його знайти і чого він чекатиме від тебе',
+        'Усвідомиш, як впливаєш на інших людей і як вони впливають на тебе',
+        'Зможеш створити послугу з розбору сумісності в парі та продавати її у своєму блозі'
+      ],
+      tags: ['Бонусний урок', '3 чек-листи'], milestone: '' },
+
+    { n: 6, title: 'Енергія та ресурс. Чому всі вічно втомлені і як це виправити',
+      result: 'Зрозумієш, де взяти енергію та ресурс, щоб діяти, і як допомогти в цьому іншим',
+      points: [
+        'Розрахуєш, як найкраще презентувати себе, щоб створювати навколо себе ком’юніті',
+        'Розберешся в ангельських числах, ресурсних символах та кольорах',
+        'Зможеш створити власну послугу, яка допомагатиме людям почуватися краще'
+      ],
+      tags: ['Бонусний блок', '3 чек-листи'], milestone: '' },
+
+    { n: 7, title: 'Дитяча матриця. Як домовитися з внутрішньою дитиною',
+      result: 'Проаналізуєш не лише себе, а й те, як батьки вплинули на те, ким ти є зараз',
+      points: [
+        'Налагодиш стосунки з дітьми (якщо вони в тебе є)',
+        '90% людей плачуть на цьому блоці — від глибоких усвідомлень про батьків і дитинство'
+      ],
+      tags: ['Бонусний урок'], milestone: '' },
+
+    { n: 8, title: 'Гроші, мислення і реалізація. Твоя фінансова стратегія',
+      result: 'Як за допомогою матриці вплинути на гроші та проявленість',
+      points: [
+        'Які конкретні кроки зробити далі, щоб отримати результат',
+        'Зможеш створити власну продуктову лінійку і продавати її',
+        'Перестанеш роздавати знання просто так — і навчишся заробляти на цьому'
+      ],
+      tags: [], milestone: 'Фінал: власна продуктова лінійка і перші клієнти' }
+  ];
+
+  (function programTabs() {
+    var tabsBox = $('#progTabs');
+    var panel = $('#progPanel');
+    if (!tabsBox || !panel) return;
+
+    var active = 0;
+    var tabs = [];
+
+    MODULES.forEach(function (m, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ptab';
+      b.id = 'ptab-' + m.n;
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-controls', 'progPanel');
+
+      var n = document.createElement('span');
+      n.className = 'ptab__n';
+      n.textContent = m.n;
+
+      var t = document.createElement('span');
+      t.className = 'ptab__title';
+      t.textContent = m.title;
+
+      b.appendChild(n);
+      b.appendChild(t);
+      b.addEventListener('click', function () { select(i); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        var next = (i + (e.key === 'ArrowDown' ? 1 : MODULES.length - 1)) % MODULES.length;
+        select(next);
+        tabs[next].focus();
+      });
+
+      tabsBox.appendChild(b);
+      tabs.push(b);
+    });
+
+    function select(i) {
+      active = i;
+      var m = MODULES[i];
+
+      tabs.forEach(function (b, k) {
+        var on = k === i;
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+        b.tabIndex = on ? 0 : -1;
+      });
+
+      panel.setAttribute('aria-labelledby', tabs[i].id);
+      panel.innerHTML = '';
+
+      panel.appendChild(el('p', 'ppanel__kicker', 'Блок ' + m.n + ' з ' + MODULES.length));
+      panel.appendChild(el('h3', 'ppanel__title', m.title));
+      panel.appendChild(el('p', 'ppanel__result', m.result));
+
+      var ul = document.createElement('ul');
+      ul.className = 'ppanel__points';
+      m.points.forEach(function (p) { ul.appendChild(el('li', '', p)); });
+      panel.appendChild(ul);
+
+      if (m.tags.length) {
+        var tagbox = document.createElement('div');
+        tagbox.className = 'ppanel__tags';
+        m.tags.forEach(function (t) { tagbox.appendChild(el('span', '', t)); });
+        panel.appendChild(tagbox);
+      }
+
+      if (m.milestone) panel.appendChild(el('p', 'ppanel__milestone', m.milestone));
+
+      track('ProgramTab', { block: m.n });
+    }
+
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      e.textContent = text;
+      return e;
+    }
+
+    select(0);
+  })();
+
+  /* ============================================================
+     Появление блоков при скролле
+     ============================================================ */
+  var reveals = $$('[data-reveal]');
+
+  function show(el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+
+  if (reduced || !reveals.length) {
+    reveals.forEach(show);
+  } else {
+    reveals.forEach(function (el, i) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      var d = (i % 4) * 70;
+      el.style.transition = 'opacity .6s cubic-bezier(.2,.7,.3,1) ' + d + 'ms, transform .6s cubic-bezier(.2,.7,.3,1) ' + d + 'ms';
+    });
+
+    var ioWorks = false;
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        ioWorks = true;
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+      reveals.forEach(function (el) { io.observe(el); });
+    }
+
+    /* Страховка: если наблюдатель не отработал — показываем по геометрии.
+       Контент важнее анимации. */
+    var geoReveal = function () {
+      reveals.forEach(function (el) {
+        if (el.style.opacity === '1') return;
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.94 && r.bottom > -80) show(el);
+      });
+    };
+    geoReveal();
+    setTimeout(function () { ioWorks ? geoReveal() : reveals.forEach(show); }, 900);
+    window.__geoReveal = geoReveal;
+  }
+
+  /* ============================================================
+     Счётчики
+     ============================================================ */
+  $$('[data-count]').forEach(function (el) {
+    var target = parseInt(el.dataset.count, 10) || 0;
+    if (reduced || !('IntersectionObserver' in window)) { el.textContent = target; return; }
+
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      var dur = 1100, t0 = performance.now();
+      var tick = function (t) {
+        var p = Math.min(1, (t - t0) / dur);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    io.observe(el);
+
+    setTimeout(function () { if (el.textContent === '0') el.textContent = target; }, 2500);
+  });
+
+  /* ============================================================
+     Верхняя панель: бургер, подсветка раздела, прогресс
+     ============================================================ */
+  var burger = $('#burger');
+  var menu = $('#mobilemenu');
+
+  function closeMenu() {
+    if (!menu) return;
+    menu.hidden = true;
+    if (burger) burger.setAttribute('aria-expanded', 'false');
+  }
+
+  if (burger && menu) {
+    burger.addEventListener('click', function () {
+      var open = !menu.hidden;
+      menu.hidden = open;
+      burger.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    $$('[data-mnav]').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  }
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 860) closeMenu();
+  });
+
+  var navLinks = $$('[data-nav]');
+  if (navLinks.length && 'IntersectionObserver' in window) {
+    var sections = navLinks.map(function (a) { return document.getElementById(a.dataset.nav); }).filter(Boolean);
+    var so = new IntersectionObserver(function (entries) {
+      var vis = entries.filter(function (e) { return e.isIntersecting; })
+                       .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+      if (!vis) return;
+      navLinks.forEach(function (a) { a.classList.toggle('is-active', a.dataset.nav === vis.target.id); });
+    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, .2, .5] });
+    sections.forEach(function (s) { so.observe(s); });
+  }
+
+  /* ============================================================
+     Скролл: панель прячется вниз / показывается вверх,
+     полоса прогресса, липкая кнопка на мобильном
+     ============================================================ */
+  var topbar = $('#topbar');
+  var progress = $('#progress');
+  var sticky = $('#stickybar');
+  var lastY = 0;
+
+  function onScroll() {
+    if (window.__geoReveal) window.__geoReveal();
+
+    var y = window.scrollY || document.documentElement.scrollTop || 0;
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+
+    if (topbar) {
+      var past = y > window.innerHeight * 0.7;
+      var menuOpen = menu && !menu.hidden;
+      if (!past) topbar.style.transform = 'translateY(-100%)';
+      else if (menuOpen || y < lastY - 4) topbar.style.transform = 'translateY(0)';
+      else if (y > lastY + 4) { topbar.style.transform = 'translateY(-100%)'; closeMenu(); }
+    }
+    if (Math.abs(y - lastY) > 4) lastY = y;
+
+    if (progress) progress.style.width = Math.min(100, (y / max) * 100) + '%';
+
+    if (sticky) {
+      /* у футера своя кнопка — липкую прячем, чтобы не дублировать */
+      var nearEnd = y > max - 420;
+      var vis = window.innerWidth <= 720 && y > window.innerHeight * 0.9 && !nearEnd;
+      sticky.style.transform = vis ? 'translateY(0)' : 'translateY(140%)';
+    }
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  /* ============================================================
+     Отзывы: стрелки по кругу
+     ============================================================ */
+  var track$ = $('#rtrack');
+  $$('[data-scroll]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (!track$) return;
+      var card = track$.querySelector('figure');
+      var step = (card ? card.offsetWidth : 360) + 18;
+      var dir = parseInt(b.dataset.scroll, 10);
+      var max = track$.scrollWidth - track$.clientWidth;
+      if (dir > 0 && track$.scrollLeft >= max - 8) track$.scrollTo({ left: 0, behavior: 'smooth' });
+      else if (dir < 0 && track$.scrollLeft <= 8) track$.scrollTo({ left: max, behavior: 'smooth' });
+      else track$.scrollBy({ left: step * dir, behavior: 'smooth' });
+    });
+  });
+  if (track$) {
+    track$.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var card = track$.querySelector('figure');
+      var step = (card ? card.offsetWidth : 360) + 18;
+      track$.scrollBy({ left: e.key === 'ArrowRight' ? step : -step, behavior: 'smooth' });
+    });
+  }
+
+  /* ============================================================
+     YouTube — iframe грузится только по клику
+     ============================================================ */
+  var yt = $('#ytlite');
+  if (yt) {
+    var play = function () {
+      var id = yt.dataset.yt;
+      if (!id) return;
+      yt.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0"' +
+        ' title="З чого складається INSIDE"' +
+        ' allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      track('VideoPlay');
+    };
+    yt.addEventListener('click', play);
+    yt.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); }
+    });
+  }
+
+  /* ============================================================
+     Досмотр секций
+     ============================================================ */
+  if ('IntersectionObserver' in window) {
+    var seen = new WeakSet();
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !seen.has(e.target)) {
+          seen.add(e.target);
+          track('SectionView', { section: e.target.id });
+        }
+      });
+    }, { threshold: 0.35 });
+    ['tariffs', 'program', 'reviews', 'support'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) sio.observe(el);
+    });
+  }
+})();
