@@ -27,7 +27,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="css/style.css">
+<!-- ?v= — метка версии. Меняешь css/js — увеличь число,
+     иначе у посетителей останется старая версия из кэша браузера. -->
+<link rel="stylesheet" href="css/style.css?v=22">
 <script>document.documentElement.classList.add('js');</script>
 
 <!-- ============================================================
@@ -172,8 +174,9 @@
   </span>
 </header>
 
-<!-- ═══════════════ ЦИФРИ ═══════════════ -->
-<section class="stats">
+<!-- ═══════════════ ЦИФРИ ═══════════════
+     Отключено в макете v2.1. Чтобы вернуть — убрать атрибут hidden. -->
+<section class="stats" hidden>
   <div class="wrap stats__grid">
     <div class="stat" data-reveal>
       <div class="stat__num" data-count="8">0</div>
@@ -371,26 +374,14 @@
       </ol>
 
       <div class="how__side" data-reveal>
-        <div class="platform">
-          <span class="platform__glow platform__glow--a" aria-hidden="true"></span>
-          <span class="platform__glow platform__glow--b" aria-hidden="true"></span>
-
-          <div class="platform__head">
-            <span class="platform__ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M22 3 11 14"/><path d="M22 3l-7 18-4-7-7-4z"/></svg>
-            </span>
-            <span class="platform__title">Бот-платформа INSIDE</span>
+        <div class="phone" id="phoneMock">
+          <div class="phone__screen">
+            <video class="phone__video" src="assets/video/platform.mp4"
+                   autoplay muted loop playsinline preload="metadata"
+                   aria-label="Демонстрація платформи INSIDE"></video>
+            <span class="phone__notch" aria-hidden="true"></span>
+            <span class="phone__glare" aria-hidden="true"></span>
           </div>
-
-          <div class="platform__tags">
-            <span>8 модулів</span>
-            <span>Відео офлайн</span>
-            <span>Бали і подарунки</span>
-            <span class="is-accent">Конспект</span>
-          </div>
-
-          <img class="platform__phone" src="assets/img/ui/phone-mockup.png"
-               alt="Платформа INSIDE на смартфоні" width="386" height="482" loading="lazy">
         </div>
       </div>
     </div>
@@ -489,7 +480,7 @@
     <div class="reviews__track" id="rtrack" tabindex="0" aria-label="Відгуки випускниць">
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/yuzvyk-anastasiia.jpg" alt="" width="128" height="128" loading="lazy">
+        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--zoom3" src="assets/img/reviews/yuzvyk-anastasiia.jpg" alt="" width="128" height="128" loading="lazy"></span>
         <figcaption class="rcard__name">Юзвик Анастасія</figcaption>
         <p class="rcard__quote">Я навчилася проявляти себе в інстаграмі, як нумеролога. Це був великий крок для мене</p>
         <blockquote>Дуже дякую Анастасії, що вона придумувала різні інтерактиви, ігри, тести, бонусні уроки, практичні домашні завдання, які були капець цікавими і кожен раз непередбачуваними. Ви завжди робили акцент на тому, що наші консультації, наш підхід до них, наш професіоналізм, наша енергія і те, як ми будемо давати інформацію індивідуально — це те за чим підуть люди саме до нас. Хочу сказати, що вклад в свій розвиток, у саму себе — це найкраща інвестиція. Ви показали мені, як прийти до успіху мені самій, показали в якому напрямку рухатися і як зрозуміти, звідки йдуть наслідки моїх проблем як особистості.</blockquote>
@@ -575,6 +566,6 @@
   </a>
 </div>
 
-<script src="js/main.js" defer></script>
+<script src="js/main.js?v=22" defer></script>
 </body>
 </html>

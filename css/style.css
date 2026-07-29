@@ -267,7 +267,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 
 /* ═══════════════ ВІДЕО ═══════════════ */
-.videosec{ background:var(--ink); padding:0 0 var(--pad-section); }
+.videosec{ background:var(--ink); padding:clamp(48px,6vw,88px) 0 var(--pad-section); }
 .ytlite{
   position:relative; border-radius:26px; overflow:hidden; cursor:pointer;
   box-shadow:0 26px 60px rgba(0,0,0,.4);
@@ -412,43 +412,31 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 .how__num{ flex:none; font-size:28px; font-weight:900; color:var(--pink); letter-spacing:-.03em; line-height:1; }
 .how__list p{ font-size:15.5px; line-height:1.6; color:var(--ink-2); text-wrap:pretty; }
-.how__side{ position:sticky; top:104px; }
+/* Телефон с видео: рамка тянется во всю высоту списка шагов */
+.how__side{ align-self:stretch; position:relative; min-height:0; }
 
-.platform{
-  position:relative; overflow:hidden; border-radius:34px;
-  background:linear-gradient(165deg,#1A1518 0%,#2C2126 100%);
-  padding:clamp(28px,3.4vw,44px) clamp(20px,2.6vw,36px) 0;
-  box-shadow:0 30px 70px rgba(26,21,24,.28);
+.phone{
+  position:absolute; top:0; bottom:0; left:50%;
+  transform:translateX(-50%);
+  height:100%; width:auto; max-width:100%;
+  aspect-ratio:.48;
+  padding:9px; border-radius:38px;
+  background:linear-gradient(150deg,#4A4046,#151113 55%,#3A3136);
+  box-shadow:0 24px 56px rgba(26,21,24,.28), inset 0 0 0 1px rgba(255,255,255,.14);
 }
-.platform__glow{ position:absolute; border-radius:50%; aspect-ratio:1; display:block; }
-.platform__glow--a{ top:-18%; left:-12%; width:70%; background:radial-gradient(circle, rgba(255,64,121,.42), rgba(255,64,121,0) 68%); }
-.platform__glow--b{ bottom:-24%; right:-16%; width:64%; background:radial-gradient(circle, rgba(255,64,121,.22), rgba(255,64,121,0) 70%); }
-.platform__head{
-  position:relative; display:flex; align-items:center; gap:10px;
-  margin-bottom:clamp(18px,2.2vw,26px);
+.phone__screen{
+  position:relative; overflow:hidden;
+  height:100%; width:100%;
+  border-radius:30px; background:#000;
 }
-.platform__ico{
-  display:grid; place-items:center; flex:none;
-  width:34px; height:34px; border-radius:50%;
-  background:var(--pink); color:#fff;
+.phone__video{ width:100%; height:100%; display:block; object-fit:cover; }
+.phone__notch{
+  position:absolute; top:9px; left:50%; transform:translateX(-50%);
+  width:31%; height:22px; border-radius:999px; background:#000;
 }
-.platform__ico svg{ width:17px; height:17px; }
-.platform__title{ font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:#fff; }
-.platform__tags{
-  position:relative; display:flex; flex-wrap:wrap; gap:8px;
-  margin-bottom:clamp(16px,2vw,24px);
-}
-.platform__tags span{
-  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);
-  color:rgba(255,255,255,.9);
-  font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:999px;
-}
-.platform__tags .is-accent{ background:var(--pink); border-color:var(--pink); color:#fff; }
-.platform__phone{
-  position:relative; width:min(340px,100%); margin:0 auto -6px;
-  border-radius:22px 22px 0 0;
-  filter:drop-shadow(0 -8px 40px rgba(0,0,0,.35));
-  animation:bob 6s ease-in-out infinite;
+.phone__glare{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(112deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 26%, rgba(255,255,255,0) 46%);
 }
 
 /* ═══════════════ ПРОГРАМА (вкладки) ═══════════════ */
@@ -558,25 +546,32 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .rnav--dark:hover{ background:var(--pink); }
 .rnav:focus-visible{ outline:3px solid var(--pink); outline-offset:3px; }
 
+/* Бесконечная лента: карточки клонируются в JS, снап и smooth выключены —
+   прокруткой управляет собственная анимация с заворотом. */
 .reviews__track{
   display:flex; gap:18px;
-  overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  overflow-x:auto;
   padding:6px 2px 22px; scrollbar-width:none;
 }
 .reviews__track::-webkit-scrollbar{ display:none; }
 .reviews__track:focus-visible{ outline:3px solid var(--pink); outline-offset:4px; border-radius:26px; }
 
 .rcard{
-  flex:0 0 min(380px,86%); scroll-snap-align:start;
+  flex:0 0 min(380px,86%);
   background:var(--card); border:1px solid var(--line); border-radius:26px;
   padding:30px 28px;
   display:flex; flex-direction:column; gap:14px;
 }
 .rcard__ava{ width:128px; height:128px; border-radius:50%; object-fit:cover; background:var(--pink-soft); }
 .rcard__avawrap{ display:block; width:128px; height:128px; border-radius:50%; overflow:hidden; flex:none; }
-/* два кадра пришлось приблизить — лицо на исходнике сильно смещено вверх */
-.rcard__ava--zoom1{ object-position:50% 20%; transform:scale(1.35); transform-origin:50% 28%; }
-.rcard__ava--zoom2{ object-position:50% 22%; transform:scale(1.35); transform-origin:50% 30%; }
+/* Три кадра кадрируются вручную: лицо на исходниках сильно смещено.
+   Значения подобраны в макете — scale, object-position и точка отсчёта. */
+.rcard__ava--zoom1,
+.rcard__ava--zoom2,
+.rcard__ava--zoom3{ width:100%; height:100%; border-radius:0; object-fit:cover; }
+.rcard__ava--zoom1{ object-position:46% 0%;  transform:scale(2.4); transform-origin:46% -2%; }
+.rcard__ava--zoom2{ object-position:55% 44%; transform:scale(2.2); transform-origin:55% 45%; }
+.rcard__ava--zoom3{ object-position:52% 0%;  transform:scale(2.8); transform-origin:52% -1%; }
 .rcard__name{ font-size:17px; font-weight:800; }
 .rcard__quote{ font-size:16px; line-height:1.5; font-weight:700; color:var(--pink); }
 .rcard blockquote{ font-size:14.5px; line-height:1.6; color:var(--ink-soft); }
@@ -618,9 +613,15 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 @media (max-width:1080px){
   .features__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
+@media (max-width:1000px){
+  /* телефон перестаёт тянуться по высоте и встаёт обычным блоком */
+  .phone{
+    position:relative; left:auto; transform:none;
+    height:auto; width:min(250px,100%); margin:0 auto;
+  }
+}
 @media (max-width:900px){
   .program__grid{ grid-template-columns:1fr; }
-  .how__side{ position:static; }
 }
 @media (max-width:860px){
   .topbar__nav{ display:none; }

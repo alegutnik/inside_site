@@ -325,28 +325,96 @@
   window.addEventListener('resize', onScroll);
 
   /* ============================================================
-     Отзывы: стрелки по кругу
+     Отзывы: бесконечная лента
+     Карточки дублируются один раз, прокрутка заворачивается по
+     ширине оригинального набора — стыка не видно ни в одну сторону.
      ============================================================ */
   var track$ = $('#rtrack');
-  $$('[data-scroll]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (!track$) return;
-      var card = track$.querySelector('figure');
-      var step = (card ? card.offsetWidth : 360) + 18;
-      var dir = parseInt(b.dataset.scroll, 10);
-      var max = track$.scrollWidth - track$.clientWidth;
-      if (dir > 0 && track$.scrollLeft >= max - 8) track$.scrollTo({ left: 0, behavior: 'smooth' });
-      else if (dir < 0 && track$.scrollLeft <= 8) track$.scrollTo({ left: max, behavior: 'smooth' });
-      else track$.scrollBy({ left: step * dir, behavior: 'smooth' });
+  if (track$ && track$.querySelector('figure')) {
+    var GAP = 18;
+    var originals = $$('figure', track$);
+
+    originals.forEach(function (el) {
+      var c = el.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      /* клоны не должны попадать в таб-порядок и в озвучку скринридером */
+      $$('a,button,[tabindex]', c).forEach(function (n) { n.tabIndex = -1; });
+      track$.appendChild(c);
     });
-  });
-  if (track$) {
+
+    var halfWidth = function () {
+      return originals.reduce(function (sum, el) { return sum + el.offsetWidth + GAP; }, 0);
+    };
+    var wrap = function (x) {
+      var h = halfWidth();
+      if (h <= 0) return x;
+      return ((x % h) + h) % h;
+    };
+
+    var DUR = 480;
+    var raf = null;
+    /* Отсечка по времени, а не флаг «идёт анимация»: если кадр почему-то
+       не придёт (фоновая вкладка, экономия энергии), она истечёт сама
+       и заворот ленты продолжит работать. */
+    var animUntil = 0;
+
+    var tween = function (delta) {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (reduced) { track$.scrollLeft = wrap(track$.scrollLeft + delta); return; }
+
+      var from = track$.scrollLeft;
+      var t0 = performance.now();
+      animUntil = t0 + DUR + 80;
+
+      var step = function (now) {
+        var p = Math.min(1, (now - t0) / DUR);
+        var e = 1 - Math.pow(1 - p, 3);
+        track$.scrollLeft = wrap(from + delta * e);
+        if (p < 1) { raf = requestAnimationFrame(step); }
+        else { raf = null; animUntil = 0; }
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    /* ручной свайп тоже заворачиваем — но не мешаем текущей анимации */
+    track$.addEventListener('scroll', function () {
+      if (performance.now() < animUntil) return;
+      var w = wrap(track$.scrollLeft);
+      if (Math.abs(w - track$.scrollLeft) > 1) track$.scrollLeft = w;
+    }, { passive: true });
+
+    var stepWidth = function () {
+      var card = track$.querySelector('figure');
+      return (card ? card.offsetWidth : 360) + GAP;
+    };
+
+    $$('[data-scroll]').forEach(function (b) {
+      b.addEventListener('click', function () { tween(stepWidth() * parseInt(b.dataset.scroll, 10)); });
+    });
+
     track$.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       e.preventDefault();
-      var card = track$.querySelector('figure');
-      var step = (card ? card.offsetWidth : 360) + 18;
-      track$.scrollBy({ left: e.key === 'ArrowRight' ? step : -step, behavior: 'smooth' });
+      tween(e.key === 'ArrowRight' ? stepWidth() : -stepWidth());
+    });
+  }
+
+  /* ============================================================
+     Видео в макете телефона — всегда без звука и по кругу
+     ============================================================ */
+  var phoneVideo = $('.phone__video');
+  if (phoneVideo) {
+    phoneVideo.muted = true;
+    phoneVideo.defaultMuted = true;
+    phoneVideo.volume = 0;
+    phoneVideo.loop = true;
+    phoneVideo.removeAttribute('controls');
+    /* autoplay в разметке может не сработать — дожимаем вручную */
+    var tryPlay = function () { var p = phoneVideo.play(); if (p) p.catch(function () {}); };
+    tryPlay();
+    phoneVideo.addEventListener('loadeddata', tryPlay);
+    phoneVideo.addEventListener('volumechange', function () {
+      if (!phoneVideo.muted) { phoneVideo.muted = true; phoneVideo.volume = 0; }
     });
   }
 
