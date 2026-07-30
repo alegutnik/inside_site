@@ -224,7 +224,24 @@
       return e;
     }
 
-    showPlaceholder();
+    /* На широком экране панель стоит рядом со списком — пусто там выглядит
+       странно, поэтому первый блок открыт. На мобильном это гармошка:
+       открытый блок сразу отодвигал бы остальные вкладки вниз, поэтому
+       стартуем закрытыми. */
+    var wide = window.matchMedia('(min-width:901px)');
+    /* Ширину берём с запасом: если она ещё неизвестна (0), считаем экран
+       широким — иначе на десктопе панель осталась бы пустой. */
+    var isWide = function () {
+      var w = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+      return w === 0 ? true : w >= 901;
+    };
+    if (isWide()) select(0); else showPlaceholder();
+
+    /* при смене ширины подстраиваемся, но не спорим с выбором пользователя */
+    wide.addEventListener('change', function (e) {
+      if (userPicked) return;
+      if (e.matches) select(0); else showPlaceholder();
+    });
   })();
 
   /* ============================================================
@@ -456,12 +473,20 @@
       var t0 = performance.now();
       animUntil = t0 + DUR + 80;
 
+      /* scroll-snap:mandatory дощёлкивает ленту к ближайшей карточке на
+         каждом кадре и превращает анимацию в рывок. Снимаем снап на время
+         анимации и возвращаем в конце — свайп пальцем снап сохраняет. */
+      track$.style.scrollSnapType = 'none';
+
       var step = function (now) {
         var p = Math.min(1, (now - t0) / DUR);
         var e = 1 - Math.pow(1 - p, 3);
         track$.scrollLeft = wrap(from + delta * e);
         if (p < 1) { raf = requestAnimationFrame(step); }
-        else { raf = null; animUntil = 0; }
+        else {
+          raf = null; animUntil = 0;
+          track$.style.scrollSnapType = '';
+        }
       };
       raf = requestAnimationFrame(step);
     };

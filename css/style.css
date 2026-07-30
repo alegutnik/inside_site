@@ -34,6 +34,10 @@
      до текста под ним (см. .hero__lead). */
   --logo-fs: clamp(60px, calc(35.8vw - 14.3px), 416px);
 
+  /* Поправка вертикали капса в кнопках — см. блок «Кнопки».
+     Отрицательная: содержимое поднимается. */
+  --caps-nudge: -.055em;
+
   --wrap:        1180px;
   --wrap-narrow: 820px;
   --pad-section: clamp(64px, 8vw, 116px);
@@ -44,9 +48,15 @@
 /* scroll-padding-top = высота верхней панели (68px): якорь встаёт ровно
    под неё. Больше — между панелью и заголовком дыра, меньше — перекрытие. */
 html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:68px; }
+/* Основной шрифт — системный, БЕЗ League Spartan.
+   Причина: League Spartan не содержит кириллицы, поэтому буквы всё равно
+   рисовал системный шрифт, а вот высоту строки браузер брал из League
+   Spartan. Из-за этого рассинхрона текст в кнопках и заголовках сидел
+   на 1-2px выше центра — «гулял». Теперь строка и глифы из одного шрифта.
+   League Spartan остаётся только там, где реально латиница (см. ниже). */
 body{
   margin:0;
-  font-family:var(--font);
+  font-family:var(--font-text);
   font-size:16px; line-height:1.55;
   color:var(--ink); background:var(--bg);
   -webkit-font-smoothing:antialiased;
@@ -64,11 +74,15 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .wrap--narrow{ max-width:var(--wrap-narrow); }
 .wrap--video{ max-width:1180px; }
 
-/* League Spartan не содержит кириллицы — украинский текст рендерится
-   подстановочным шрифтом. Из-за этого латинское «Zoom» набиралось другой
-   гарнитурой и выглядело мельче соседних слов, хотя по высоте прописных
-   было даже крупнее. Принудительно ставим ту же гарнитуру, что у текста. */
-.zoomword{ font-family:var(--font-text); }
+/* Единственные места, где текст действительно латиницей — там и работает
+   League Spartan. Всё остальное набрано системным шрифтом (см. body). */
+.hero__logo,
+.topbar__logo,
+.tcard__name{ font-family:var(--font); }
+/* ...а кириллические вставки внутри них возвращаем на текстовый шрифт,
+   иначе внутри одной строки снова смешаются две гарнитуры */
+.hero__start,
+.tcard__name span{ font-family:var(--font-text); }
 .pink{ color:var(--pink); }
 .dim{ color:rgba(255,255,255,.55); }
 
@@ -95,10 +109,20 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .h2--light{ color:#fff; }
 .h2--left{ margin:0; }
 
-/* ---------- Кнопки ---------- */
+/* ---------- Кнопки ----------
+   Надписи набраны капсом. Строка центрируется по полной высоте шрифта
+   (ascent 1.08em + descent 0.25em), а прописные занимают лишь 0.72em —
+   их середина оказывается на 0.055em НИЖЕ середины строки. Компенсируем
+   асимметрией вертикальных полей: содержимое поднимается на --caps-nudge.
+   Иконки — реальные боксы, они центрируются верно, поэтому им сдвиг
+   возвращается обратно.
+   ВАЖНО при перепроверке: высоту прописных мерить строкой БЕЗ «Й» —
+   её бревис торчит выше капса и завышает замер вдвое. */
 .btn{
+  --pad-y:17px;
   display:inline-flex; align-items:center; justify-content:center; gap:12px;
-  padding:17px 30px; border-radius:999px;
+  padding:calc(var(--pad-y) + var(--caps-nudge)) 30px calc(var(--pad-y) - var(--caps-nudge));
+  border-radius:999px;
   font-size:13px; font-weight:800; line-height:1.2;
   text-transform:uppercase; letter-spacing:.07em; text-align:center;
   border:2px solid transparent; cursor:pointer;
@@ -107,7 +131,13 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .btn:hover{ transform:translateY(-3px); }
 .btn:active{ transform:translateY(0); }
 .btn:focus-visible{ outline:3px solid var(--pink); outline-offset:4px; }
-.btn--lg{ padding:22px 40px; font-size:clamp(13px,1.4vw,16px); gap:14px; }
+.btn--lg{ --pad-y:22px; padding-inline:40px; font-size:clamp(13px,1.4vw,16px); gap:14px; }
+
+/* иконкам возвращаем сдвиг, чтобы они остались по центру */
+.btn__ico, .btn__tg, .btn__arrow,
+.stickybar__tg svg, .ptab__n{
+  position:relative; top:calc(-1 * var(--caps-nudge));
+}
 
 .btn--dark{ background:var(--ink); color:#fff; box-shadow:0 14px 30px rgba(26,21,24,.24); }
 .btn--dark:hover{ box-shadow:0 22px 44px rgba(26,21,24,.32); }
@@ -161,7 +191,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   background:var(--pink); color:#fff;
   font-size:12px; font-weight:800;
   text-transform:uppercase; letter-spacing:.06em;
-  padding:11px 22px; border-radius:999px;
+  padding:calc(11px + var(--caps-nudge)) 22px calc(11px - var(--caps-nudge)); border-radius:999px;
   box-shadow:0 6px 18px rgba(255,64,121,.3);
   transition:background-color .18s ease;
 }
@@ -369,7 +399,8 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .tcard__tag{ font-size:14px; line-height:1.5; color:var(--ink-soft); }
 .tcard__price{ margin-top:auto; font-size:44px; font-weight:900; letter-spacing:-.03em; line-height:1; }
 .tcard__btn{
-  text-align:center; padding:15px 26px; border-radius:999px;
+  text-align:center; border-radius:999px;
+  padding:calc(15px + var(--caps-nudge)) 26px calc(15px - var(--caps-nudge));
   font-size:12.5px; font-weight:800;
   text-transform:uppercase; letter-spacing:.07em;
   transition:background-color .18s ease;
@@ -407,10 +438,13 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   color:rgba(255,255,255,.82);
 }
 .qcard__title{ font-size:clamp(17px,1.8vw,22px); font-weight:800; color:#fff; }
+/* Один и тот же шаг сверху и снизу карточки — иначе ритм «плывёт»:
+   было 34px над и 24px под ней. */
 .questions__cta{
   display:flex; flex-wrap:wrap; gap:14px; justify-content:center;
-  margin-top:clamp(24px,3vw,34px);
+  margin-top:clamp(28px,3.6vw,44px);
 }
+.questions__inner .h2{ margin-bottom:clamp(28px,3.6vw,44px); }
 
 /* ═══════════════ ЩО ЧЕКАЄ ВСЕРЕДИНІ ═══════════════ */
 .features{ background:var(--bg); padding:var(--pad-section) 0; }
@@ -492,7 +526,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .program__tabs{ display:flex; flex-direction:column; gap:8px; }
 .ptab{
   display:flex; align-items:center; gap:14px; width:100%;
-  padding:16px 20px; border-radius:18px; cursor:pointer;
+  padding:calc(16px + var(--caps-nudge)) 20px calc(16px - var(--caps-nudge)); border-radius:18px; cursor:pointer;
   font-size:15.5px; font-weight:600; text-align:left;
   background:var(--card); color:var(--ink-2);
   border:1px solid var(--line);
@@ -670,7 +704,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .stickybar__main{
   flex:1; text-align:center;
   background:var(--pink); color:#fff;
-  padding:16px 20px; border-radius:999px;
+  padding:calc(16px + var(--caps-nudge)) 20px calc(16px - var(--caps-nudge)); border-radius:999px;
   font-size:12.5px; font-weight:800;
   text-transform:uppercase; letter-spacing:.06em;
   box-shadow:0 12px 30px rgba(255,64,121,.4);
