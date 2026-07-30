@@ -357,9 +357,14 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 
 /* ═══════════════ ТАРИФИ ═══════════════ */
 .tariffs{ background:var(--card); padding:var(--pad-section) 0; }
+/* Либо все три в ряд, либо по одной в столбец. Промежуточного «2+1»
+   быть не должно: auto-fit раньше давал именно его на планшете. */
 .tariffs__grid{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  display:grid; grid-template-columns:1fr;
   gap:clamp(16px,1.8vw,26px); align-items:start;
+}
+@media (min-width:940px){
+  .tariffs__grid{ grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 .tcard{
   position:relative;
@@ -438,6 +443,31 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   color:rgba(255,255,255,.82);
 }
 .qcard__title{ font-size:clamp(17px,1.8vw,22px); font-weight:800; color:#fff; }
+/* ---- Выбор тарифа для брони ---- */
+.picker{ margin-top:clamp(22px,2.8vw,32px); text-align:center; }
+.picker__label{
+  margin:0 0 12px;
+  font-size:12px; font-weight:800;
+  text-transform:uppercase; letter-spacing:.14em;
+  color:rgba(255,255,255,.72);
+}
+.picker__opts{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.picker__opt{
+  padding:calc(11px + var(--caps-nudge)) 22px calc(11px - var(--caps-nudge));
+  border-radius:999px; cursor:pointer;
+  font-size:12.5px; font-weight:800;
+  text-transform:uppercase; letter-spacing:.07em;
+  background:rgba(255,255,255,.08); color:#fff;
+  border:2px solid rgba(255,255,255,.28);
+  transition:background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.picker__opt:hover{ border-color:rgba(255,255,255,.6); }
+.picker__opt[aria-checked="true"]{
+  background:var(--pink); border-color:var(--pink); color:#fff;
+  box-shadow:0 8px 22px rgba(255,64,121,.36);
+}
+.picker__opt:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
+
 /* Один и тот же шаг сверху и снизу карточки — иначе ритм «плывёт»:
    было 34px над и 24px под ней. */
 .questions__cta{

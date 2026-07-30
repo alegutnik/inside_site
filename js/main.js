@@ -112,6 +112,14 @@
     var tabs = [];
     var userPicked = false;   /* чтобы не скроллить при первой отрисовке */
 
+    var wide = window.matchMedia('(min-width:901px)');
+    /* Ширину берём с запасом: если она ещё неизвестна (0), считаем экран
+       широким — иначе на десктопе панель осталась бы пустой. */
+    var isWide = function () {
+      var w = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+      return w === 0 ? true : w >= 901;
+    };
+
     MODULES.forEach(function (m, i) {
       var b = document.createElement('button');
       b.type = 'button';
@@ -135,10 +143,12 @@
 
       b.appendChild(n);
       b.appendChild(t);
-      /* повторный клик по открытой вкладке — закрывает её */
+      /* Повторный клик закрывает блок только на мобильном (там гармошка).
+         На десктопе панель всегда должна что-то показывать. */
       b.addEventListener('click', function () {
         userPicked = true;
-        if (active === i) showPlaceholder(); else select(i);
+        if (active === i && !isWide()) showPlaceholder();
+        else select(i);
       });
       b.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
@@ -228,19 +238,61 @@
        странно, поэтому первый блок открыт. На мобильном это гармошка:
        открытый блок сразу отодвигал бы остальные вкладки вниз, поэтому
        стартуем закрытыми. */
-    var wide = window.matchMedia('(min-width:901px)');
-    /* Ширину берём с запасом: если она ещё неизвестна (0), считаем экран
-       широким — иначе на десктопе панель осталась бы пустой. */
-    var isWide = function () {
-      var w = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0);
-      return w === 0 ? true : w >= 901;
-    };
     if (isWide()) select(0); else showPlaceholder();
 
     /* при смене ширины подстраиваемся, но не спорим с выбором пользователя */
     wide.addEventListener('change', function (e) {
       if (userPicked) return;
       if (e.matches) select(0); else showPlaceholder();
+    });
+  })();
+
+  /* ============================================================
+     Выбор тарифа для бронирования
+     Кнопки «Предзапис» в карточках ведут к блоку брони и сразу
+     отмечают нужный вариант.
+     ============================================================ */
+  (function tariffPicker() {
+    var opts = $$('.picker__opt');
+    var label = $('#bookTariff');
+    var btn = $('#bookBtn');
+    if (!opts.length) return;
+
+    function pick(name) {
+      var found = false;
+      opts.forEach(function (o) {
+        var on = o.dataset.tariff === name;
+        o.setAttribute('aria-checked', on ? 'true' : 'false');
+        if (on) { found = true; if (label) label.textContent = o.textContent.trim(); }
+      });
+      if (found && btn) btn.dataset.tariff = name;
+      return found;
+    }
+
+    opts.forEach(function (o) {
+      o.addEventListener('click', function () {
+        pick(o.dataset.tariff);
+        track('TariffPick', { tariff: o.dataset.tariff, from: 'picker' });
+      });
+    });
+
+    /* клик по «Предзапис» в карточке тарифа */
+    $$('[data-pick]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        pick(a.dataset.pick);
+        track('TariffPick', { tariff: a.dataset.pick, from: 'card' });
+      });
+    });
+
+    /* стрелками между вариантами, как в настоящей радиогруппе */
+    opts.forEach(function (o, i) {
+      o.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var next = (i + (e.key === 'ArrowRight' ? 1 : opts.length - 1)) % opts.length;
+        pick(opts[next].dataset.tariff);
+        opts[next].focus();
+      });
     });
   })();
 
