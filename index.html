@@ -29,7 +29,7 @@
 
 <!-- ?v= — метка версии. Меняешь css/js — увеличь число,
      иначе у посетителей останется старая версия из кэша браузера. -->
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 <script>document.documentElement.classList.add('js');</script>
 
 <!-- ============================================================
@@ -199,7 +199,7 @@
 
 <!-- ═══════════════ ВІДЕО ═══════════════ -->
 <section class="videosec">
-  <div class="wrap wrap--narrow">
+  <div class="wrap wrap--video">
     <div class="ytlite" id="ytlite" data-yt="ijmgufEDiJI" role="button" tabindex="0"
          aria-label="Відтворити відео: З чого складається INSIDE">
       <img src="assets/img/ui/video-cover.jpg" alt="" width="1280" height="720">
@@ -242,7 +242,7 @@
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>Розгорнутий фідбек</b> на домашні завдання від практикуючої нумерологині — куратора</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>Чат однодумців</b>, з якими ти пройдеш трансформацію разом</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span>Структурований конспект, у якому поетапно збирається вся інформація з курсу</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>5 Zoom-воркшопів</b> з реальними прикладами і зірковими розборами</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b><span class="zoomword">Zoom</span>-воркшопів</b> — 5, з реальними прикладами і зірковими розборами</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>6 місяців</b> доступу до матеріалів</span></li>
         </ul>
         <p class="tcard__price">588$</p>
@@ -267,7 +267,7 @@
 
 <!-- ═══════════════ РОЗСТРОЧКА ═══════════════ -->
 <section class="questions photosec">
-  <img class="photosec__bg" src="assets/img/bg/questions.jpg" alt="" loading="lazy">
+  <img class="photosec__bg" src="assets/img/bg/questions.jpg" alt="" loading="lazy" decoding="async">
   <div class="wrap wrap--narrow questions__inner">
     <h2 class="h2 h2--light" data-reveal>Залишились питання?</h2>
 
@@ -404,7 +404,7 @@
 
 <!-- ═══════════════ БОНУСИ ═══════════════ -->
 <section class="bonuses photosec">
-  <img class="photosec__bg" src="assets/img/bg/bonuses.jpg" alt="" loading="lazy">
+  <img class="photosec__bg" src="assets/img/bg/bonuses.jpg" alt="" loading="lazy" decoding="async">
   <div class="wrap bonuses__inner">
     <p class="eyebrow" data-reveal>Понад програму</p>
     <h2 class="h2 h2--light" data-reveal>Бонуси і подарунки</h2>
@@ -480,59 +480,101 @@
     <div class="reviews__track" id="rtrack" tabindex="0" aria-label="Відгуки випускниць">
 
       <figure class="rcard">
-        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--zoom3" src="assets/img/reviews/yuzvyk-anastasiia.jpg" alt="" width="128" height="128" loading="lazy"></span>
-        <figcaption class="rcard__name">Юзвик Анастасія</figcaption>
-        <p class="rcard__quote">Я навчилася проявляти себе в інстаграмі, як нумеролога. Це був великий крок для мене</p>
-        <blockquote>Дуже дякую Анастасії, що вона придумувала різні інтерактиви, ігри, тести, бонусні уроки, практичні домашні завдання, які були капець цікавими і кожен раз непередбачуваними. Ви завжди робили акцент на тому, що наші консультації, наш підхід до них, наш професіоналізм, наша енергія і те, як ми будемо давати інформацію індивідуально — це те за чим підуть люди саме до нас. Хочу сказати, що вклад в свій розвиток, у саму себе — це найкраща інвестиція. Ви показали мені, як прийти до успіху мені самій, показали в якому напрямку рухатися і як зрозуміти, звідки йдуть наслідки моїх проблем як особистості.</blockquote>
+        <img class="rcard__ava" src="assets/img/reviews/fortuna-nadiia.jpg" alt="Надія Фортуна — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Надія Фортуна</figcaption>
+        <p class="rcard__quote">Я нарешті зрозуміла, який унікальний продукт я можу створювати, поєднавши малювання і нумерологію — і в мене вже є 7 клієнтів на картини удачі!</p>
+        <blockquote><b>З'явилось чітке розуміння, чим я хочу займатись, і ставлення до блогу як до інструменту роботи.</b> Зупиняло те, що я думала, що буду використовувати ці знання лише для себе, для своїх особистих потреб, бо не хотіла консультувати, тому що хотіла розвиватись як художниця. <b>Настя допомогла зʼєднати малювання і нумерологію в «одну картину».</b></blockquote>
       </figure>
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/chaliienko-iryna.jpg" alt="" width="128" height="128" loading="lazy">
+        <img class="rcard__ava" src="assets/img/reviews/tymoshenko-maryna.jpg" alt="Тимошенко Марина — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Тимошенко Марина</figcaption>
+        <p class="rcard__quote">Піти на цей курс було моїм найкращим рішенням. Навчання коштує кожної гривні.</p>
+        <blockquote>Я в шоці, що вже так багато зрозуміла і навіть можу допомагати людям зрозуміти себе. Мені безмежно подобається курс😍 я ні на мить не пожалкувала, що наважилась на цей крок. А ще дуже тішить, що <b>стає все менше скептиків і людям відгукується нумерологія.</b> Перед кожним домашнім завданням боялась, що не впораюсь, але виходити з зони комфорту мені подобається.</blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/chaliienko-iryna.jpg" alt="Чалієнко Ірина — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Чалієнко Ірина</figcaption>
         <p class="rcard__quote">Я справді почуваю себе готовою бути нумерологом</p>
-        <blockquote>Анастасія, величезне дякую за навчання та всі знання, що мені дали. Я справді почуваю себе готовою бути нумерологом, а моя матриця вказує на невпевненість в своїх силах, але ваш психологічний підхід дав мені можливість це побороти. Дякую! Чекаю на курс підвищення кваліфікації)</blockquote>
+        <blockquote>Анастасія, величезне дякую за навчання та всі знання, що мені дали. Я справді почуваю себе готовою бути нумерологом, а моя матриця вказує на <b>невпевненість в своїх силах, але ваш психологічний підхід дав мені можливість це побороти.</b> Дякую! Чекаю на курс підвищення кваліфікації)</blockquote>
       </figure>
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/havryl-oksana.jpg" alt="" width="128" height="128" loading="lazy">
+        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--yuzvyk" src="assets/img/reviews/yuzvyk-anastasiia.jpg" alt="Юзвик Анастасія — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async"></span>
+        <figcaption class="rcard__name">Юзвик Анастасія</figcaption>
+        <p class="rcard__quote">Я навчилася проявляти себе в інстаграмі, як нумеролога. Це був великий крок для мене</p>
+        <blockquote>Дуже дякую Анастасії, що вона придумувала <b>різні інтерактиви, ігри, тести, бонусні уроки, практичні домашні завдання</b>, які були капець цікавими і кожен раз непередбачуваними. Ви завжди робили акцент на тому, що наш професіоналізм, наша енергія і те, як ми будемо давати інформацію індивідуально — це те за чим підуть люди саме до нас. Хочу сказати, що <b>вклад в свій розвиток, у саму себе — це найкраща інвестиція.</b> Ви показали мені, як прийти до успіху мені самій, показали в якому напрямку рухатися.</blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/havryl-oksana.jpg" alt="Гавриль Оксана — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Гавриль Оксана</figcaption>
         <p class="rcard__quote">Я тепер легко розбираюсь у людях, і найголовніше розумію себе</p>
-        <blockquote>Ці знання чудові і безцінні! Я тепер легко розбираюсь у людях, і найголовніше розумію себе. Не вважаю, що я якась не така, що мені чогось не вистачає. І найголовніше, що цими знаннями я можу допомагати іншим. Я щаслива!🥺🌸 Щодо організації курсу: уроки виходили вчасно, і у нас був час на вивчення та відточення навичок. За дз, окреме дякую! Також різні активності, прямі ефіри та бонуси — вау! Спасибі всім 😍💥❤️</blockquote>
+        <blockquote>Ці знання чудові і безцінні! Я тепер легко розбираюсь у людях, і найголовніше розумію себе. Не вважаю, що я якась не така, що мені чогось не вистачає. І найголовніше, що цими знаннями я можу допомагати іншим. Я щаслива!🥺🌸 Щодо організації курсу: <b>уроки виходили вчасно, і у нас був час на вивчення та відточення навичок. За дз, окреме дякую!</b> Також різні активності, прямі ефіри та бонуси — вау! Спасибі всім 😍💥❤️</blockquote>
       </figure>
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/lutsenko-alona.jpg" alt="" width="128" height="128" loading="lazy">
+        <img class="rcard__ava" src="assets/img/reviews/lutsenko-alona.jpg" alt="Луценко Альона — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Луценко Альона</figcaption>
         <p class="rcard__quote">Застосовуючи отриману інформацію на собі, родині та друзях — отримували неймовірні результати</p>
-        <blockquote>Це було неймовірно! Кожен урок чекала із захватом та натхненням. Кожне слово, кожна рекомендація — це потрапляння у ціль та саме серденько. Я ні секунди не пожаліла про те, що вирішила піти навчатися, бо та інформація якої ти навчаєш, насправді унікальна і на вагу золота. Я не хочу, щоб навчання закінчувалося, а хочу продовжувати ще і ще!</blockquote>
+        <blockquote>Це було неймовірно! Кожен урок чекала із захватом та натхненням. <b>Кожне слово, кожна рекомендація — це потрапляння у ціль та саме серденько.</b> Я ні секунди не пожаліла про те, що вирішила піти навчатися, бо та інформація якої ти навчаєш, насправді унікальна і на вагу золота. <b>Я не хочу, щоб навчання закінчувалося, а хочу продовжувати ще і ще!</b></blockquote>
       </figure>
 
       <figure class="rcard">
-        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--zoom1" src="assets/img/reviews/stefanyuk-khrystyna.jpg" alt="" width="128" height="128" loading="lazy"></span>
+        <img class="rcard__ava" src="assets/img/reviews/stefanyuk-khrystyna.jpg" alt="Стефанюк Христина — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Стефанюк Христина</figcaption>
         <p class="rcard__quote">Кожен блок детально пояснювався, а конспект взагалі на вагу золота. Куратор неймовірний, все знає і за всім слідкує</p>
-        <blockquote>Дякую велике за прекрасний період свого життя! Це було несподіване для мене рішення, але воно було правильним. Це одне з найкращих онлайн навчань, коли я його завершила🔥🤪 Дуже дякую за можливість навчатись💫🔥 дуже шкода що вже завершується навчання, але впевнена ми ще зустрінемось 💐❤️ Дякую велике за все. Ви найкращі ❤️❤️❤️❤️ Обіймаю і ділюся своєю енергією🤩🎁 дякуюююююююююю🥰😍❤️❤️</blockquote>
+        <blockquote>Дякую велике за прекрасний період свого життя! Це було несподіване для мене рішення, але воно було правильним. <b>Це одне з найкращих онлайн навчань, коли я його завершила🔥🤪</b> Дуже дякую за можливість навчатись💫🔥 дуже шкода що вже завершується навчання, але впевнена ми ще зустрінемось 💐❤️ Дякую велике за все. Ви найкращі ❤️ Обіймаю і ділюся своєю енергією🤩🎁 дякуюююююююююю🥰😍❤️</blockquote>
       </figure>
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/rudenko-sofiia.jpg" alt="" width="128" height="128" loading="lazy">
+        <img class="rcard__ava" src="assets/img/reviews/rudenko-sofiia.jpg" alt="Руденко Софія — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Руденко Софія</figcaption>
         <p class="rcard__quote">Я давно практикую нумерологію, але дізналась дуже багато нової інформації, яку ніде не бачила та не чула</p>
-        <blockquote>Школа мені дуже сподобалась. Дуже сподобались прямі ефіри та рубрика питання-відповідь. Також куратор завжди була на зв'язку і допомагала із всіма питаннями. Дуже круто, що інформація яка надається — її одразу можна застосувати на практиці.</blockquote>
+        <blockquote>Школа мені дуже сподобалась. Дуже сподобались прямі ефіри та рубрика питання-відповідь. Також куратор завжди була на зв'язку і допомагала із всіма питаннями. Дуже круто, що <b>інформація яка надається — її одразу можна застосувати на практиці.</b></blockquote>
       </figure>
 
       <figure class="rcard">
-        <img class="rcard__ava" src="assets/img/reviews/filenko-nataliia.jpg" alt="" width="128" height="128" loading="lazy">
+        <img class="rcard__ava" src="assets/img/reviews/filenko-nataliia.jpg" alt="Філенко Наталія — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
         <figcaption class="rcard__name">Філенко Наталія</figcaption>
         <p class="rcard__quote">Знання які я отримала змінюють життя: допомагають усвідомити причини, наслідки і зрозуміти як це виправляти🔥</p>
-        <blockquote>Настя, хочу Вам подякувати за такий цікавий курс з нумерології❤️ Інформації дуже достатньо, вона дуже змістовна, подається чітко, цікаво та поступово. Дуже зручно що є запис можна передивитися та освіжити в памʼяті пройдений матеріал. Завжди можна задати запитання та отримати відповідь🥰</blockquote>
+        <blockquote>Настя, хочу Вам подякувати за такий цікавий курс з нумерології❤️ Інформації дуже достатньо, вона дуже змістовна, подається чітко, цікаво та поступово. Дуже зручно що є запис можна передивитися та освіжити в памʼяті пройдений матеріал. <b>Завжди можна задати запитання та отримати відповідь🥰</b></blockquote>
       </figure>
 
       <figure class="rcard">
-        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--zoom2" src="assets/img/reviews/kulikova-alina.jpg" alt="" width="128" height="128" loading="lazy"></span>
+        <span class="rcard__avawrap"><img class="rcard__ava rcard__ava--kulikova" src="assets/img/reviews/kulikova-alina.jpg" alt="Кулікова Аліна — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async"></span>
         <figcaption class="rcard__name">Кулікова Аліна</figcaption>
         <p class="rcard__quote">Потрапила на курс дуже спонтанно, але ні на секунду не пошкодувала</p>
-        <blockquote>Безмежно щаслива, що потрапила на це навчання! Дуже і дуже багато крутої інформації! Обожнюю зідзвони 😻 на них якийсь особливий вайб. Дякую за цей курс, інформацію, щирість та відданість своїй роботі❤️ Вже з нетерпінням чекаю на курс підвищення кваліфікації (хай йде хоч рік 😅)</blockquote>
+        <blockquote>Безмежно щаслива, що потрапила на це навчання! Дуже і дуже багато крутої інформації! <b>Обожнюю зідзвони 😻 на нихякийсь особливий вайб.</b> Дякую за цей курс, інформацію, щирість та відданість своїй роботі❤️ Вже з нетерпінням чекаю на курс підвищення кваліфікації (хай йде хоч рік 😅)</blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/kuzhyn-anastasiia.jpg" alt="Анастасія Кужин — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Анастасія Кужин</figcaption>
+        <p class="rcard__quote">Тут вдалося створити неймовірне ком'юніті з дівчат, кожна з яких мотивує, надихає та підтримує</p>
+        <blockquote>В курсі INSIDE багато змістовної, цікавої інформації з нумерології. І ця підтримка дуже допомагає рухатися далі, не боятися, а йти вперед. <b>А кожен зідзвон — це дійсно купа інсайдів для кожної учениці.</b></blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/voronkina-kateryna.jpg" alt="Воронкіна Катерина — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Воронкіна Катерина</figcaption>
+        <p class="rcard__quote">Я навіть не уявляю, що можна ще придумати — курс дуже продуманий. Тепер хочу навчання із прогностики 😅</p>
+        <blockquote><b>Я мала знання, але шукала той самий чарівний «пендель»</b> і вирішила, що цей курс ідеально підходить під це завдання. Здавалося, що не буде часу, я не встигатиму або втрачу цікавість, але з таким продуманим курсом, мені здається, це нереально.</blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/demianova-yuliia.jpg" alt="Юлія Демʼянова — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Юлія Демʼянова</figcaption>
+        <p class="rcard__quote">Було страшно, що це буде дуже важко, що я не зможу все зрозуміти... але буквально через кілька модулів все влягалось</p>
+        <blockquote>Спочатку так і було, купа інформації, але <b>коли було багато практичних моментів, потихеньку все стало на місце.</b> Насправді на практичних завданнях чи по чату дуже багато підсвічується.</blockquote>
+      </figure>
+
+      <figure class="rcard">
+        <img class="rcard__ava" src="assets/img/reviews/nespriadko-yanina.jpg" alt="Яніна Неспрядько — учениця курсу INSIDE" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption class="rcard__name">Яніна Неспрядько</figcaption>
+        <p class="rcard__quote">Навчання пройшло на одному диханні ⏳! Я навіть не очікувала, що буде так багато інформації в одному курсі</p>
+        <blockquote>Настя, величезне тобі дякую за таке цікаве навчання! І безмежна вдячність куратору за теплу підтримку і корисні поради! По-перше, мені дуууже сподобався формат навчання 🥰. <b>Зідзвони то взагалі «one love»!!</b>! Давали натхнення, підтримку, емоції! По-друге, <b>неймовірно зручний бот!</b> Все як по поличках 🤩. Далі перейдемо до самої інформації 😃! Її СТІЛЬКИ!!! <b>Окремо дякую за конспект, який теж прям по блокам розбитий.</b></blockquote>
       </figure>
 
     </div>
@@ -549,10 +591,6 @@
       Написати в службу турботи
     </a>
 
-    <nav class="footer__links">
-      <a href="terms.html">Умови та підтримка</a>
-      <a href="privacy.html">Політика конфіденційності</a>
-    </nav>
     <p class="footer__copy">© <span id="year">2026</span> INSIDE — Школа нумерології Анастасії Карімової</p>
   </div>
 </footer>
@@ -566,6 +604,6 @@
   </a>
 </div>
 
-<script src="js/main.js?v=22" defer></script>
+<script src="js/main.js?v=23" defer></script>
 </body>
 </html>

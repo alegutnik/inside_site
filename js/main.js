@@ -127,6 +127,11 @@
       t.className = 'ptab__title';
       t.textContent = m.title;
 
+      /* order нужен для мобильной гармошки: вкладки чётные, панель
+         встаёт на нечётный сразу за выбранной. На десктопе не влияет. */
+      b.style.order = i * 2;
+      b.style.gridColumn = '1';
+
       b.appendChild(n);
       b.appendChild(t);
       b.addEventListener('click', function () { select(i); });
@@ -153,6 +158,7 @@
       });
 
       panel.setAttribute('aria-labelledby', tabs[i].id);
+      panel.style.order = i * 2 + 1;
       panel.innerHTML = '';
 
       panel.appendChild(el('p', 'ppanel__kicker', 'Блок ' + m.n + ' з ' + MODULES.length));
@@ -252,6 +258,35 @@
   });
 
   /* ============================================================
+     Автоподсветка карточки «Що чекає всередині»
+     Та, что ближе к центру экрана, подсвечивается сама — на
+     мобильном ховера нет, и без этого блок выглядит мёртвым.
+     ============================================================ */
+  var hlCards = $$('.features__grid > .fcard');
+  var syncHighlight = null;
+
+  if (hlCards.length && !reduced) {
+    var hlCurrent = null;
+    syncHighlight = function () {
+      var mid = window.innerHeight * 0.45;
+      var best = null, bestD = Infinity;
+
+      hlCards.forEach(function (c) {
+        var r = c.getBoundingClientRect();
+        if (r.bottom < 40 || r.top > window.innerHeight - 40) return;
+        var d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < bestD) { bestD = d; best = c; }
+      });
+
+      if (best === hlCurrent) return;
+      if (hlCurrent) hlCurrent.classList.remove('is-near');
+      hlCurrent = best;
+      if (best) best.classList.add('is-near');
+    };
+    syncHighlight();
+  }
+
+  /* ============================================================
      Верхняя панель: бургер, подсветка раздела, прогресс
      ============================================================ */
   var burger = $('#burger');
@@ -298,6 +333,7 @@
 
   function onScroll() {
     if (window.__geoReveal) window.__geoReveal();
+    if (syncHighlight) syncHighlight();
 
     var y = window.scrollY || document.documentElement.scrollTop || 0;
     var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);

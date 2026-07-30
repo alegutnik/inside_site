@@ -51,6 +51,9 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 
 .wrap{ width:100%; max-width:var(--wrap); margin-inline:auto; padding-inline:20px; }
 .wrap--narrow{ max-width:var(--wrap-narrow); }
+.wrap--video{ max-width:1060px; }
+/* «Zoom» набран чуть крупнее — так решено в макете */
+.zoomword{ font-size:1.09em; letter-spacing:.005em; }
 .pink{ color:var(--pink); }
 .dim{ color:rgba(255,255,255,.55); }
 
@@ -173,7 +176,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   position:relative; overflow:hidden;
   min-height:100svh;
   display:flex; flex-direction:column; justify-content:center;
-  padding:88px 0 56px;
+  padding:104px 0 84px;
   background:linear-gradient(180deg,#FFF2F6 0%,#FFF2F6 88%,#F6E4EA 100%);
 }
 .hero__blobs{ position:absolute; inset:-20% -10%; pointer-events:none; }
@@ -225,7 +228,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .hero__start b{ color:var(--ink); font-weight:800; }
 
 .hero__lead{
-  max-width:720px; margin:clamp(24px,3.4vw,44px) auto 0;
+  max-width:720px; margin:clamp(10px,1.6vw,22px) auto 0;
   text-align:center;
   font-size:clamp(16px,1.55vw,21px); line-height:1.5;
   color:var(--ink-2);
@@ -362,9 +365,9 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 
 .questions__inner{ text-align:center; }
 .qcard{
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.16);
-  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  background:rgba(26,21,24,.58);
+  border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(22px) saturate(1.1); -webkit-backdrop-filter:blur(22px) saturate(1.1);
   border-radius:26px; padding:clamp(26px,3.4vw,40px);
   display:flex; flex-direction:column; gap:16px;
   text-align:left; font-size:15.5px; line-height:1.6;
@@ -387,7 +390,8 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   padding:30px 28px 32px;
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.fcard:hover{ transform:translateY(-6px); box-shadow:0 22px 44px rgba(26,21,24,.09); border-color:#FFC9DA; }
+.fcard:hover,
+.fcard.is-near{ transform:translateY(-6px); box-shadow:0 22px 44px rgba(26,21,24,.09); border-color:#FFC9DA; }
 .fcard__ico{
   display:grid; place-items:center;
   width:52px; height:52px; border-radius:50%;
@@ -443,8 +447,9 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .program{ background:var(--card); padding:var(--pad-section) 0; }
 .program__hint{ margin:0 0 clamp(28px,3.6vw,44px); font-size:15.5px; color:var(--ink-soft); }
 .program__grid{
-  display:grid; grid-template-columns:minmax(300px,420px) 1fr;
-  gap:clamp(20px,2.6vw,32px); align-items:start;
+  display:grid; grid-template-columns:minmax(280px,420px) 1fr;
+  column-gap:clamp(20px,2.6vw,32px); row-gap:8px;
+  align-items:start;
 }
 .program__tabs{ display:flex; flex-direction:column; gap:8px; }
 .ptab{
@@ -468,6 +473,9 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .ptab__title{ flex:1; line-height:1.3; }
 
 .program__panel{
+  /* прибита во вторую колонку на всю высоту списка вкладок;
+     в мобильном flex-режиме эти свойства просто игнорируются */
+  grid-column:2; grid-row:1 / span 8;
   background:var(--bg); border:1px solid var(--line); border-radius:28px;
   padding:clamp(28px,3vw,44px); min-height:420px;
 }
@@ -564,14 +572,12 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 .rcard__ava{ width:128px; height:128px; border-radius:50%; object-fit:cover; background:var(--pink-soft); }
 .rcard__avawrap{ display:block; width:128px; height:128px; border-radius:50%; overflow:hidden; flex:none; }
-/* Три кадра кадрируются вручную: лицо на исходниках сильно смещено.
+/* Два кадра кадрируются вручную: лицо на исходнике сильно смещено.
    Значения подобраны в макете — scale, object-position и точка отсчёта. */
-.rcard__ava--zoom1,
-.rcard__ava--zoom2,
-.rcard__ava--zoom3{ width:100%; height:100%; border-radius:0; object-fit:cover; }
-.rcard__ava--zoom1{ object-position:46% 0%;  transform:scale(2.4); transform-origin:46% -2%; }
-.rcard__ava--zoom2{ object-position:55% 44%; transform:scale(2.2); transform-origin:55% 45%; }
-.rcard__ava--zoom3{ object-position:52% 0%;  transform:scale(2.8); transform-origin:52% -1%; }
+.rcard__ava--yuzvyk,
+.rcard__ava--kulikova{ width:100%; height:100%; border-radius:0; object-fit:cover; }
+.rcard__ava--yuzvyk{   object-position:52% 0%;  transform:scale(2.8); transform-origin:52% -1%; }
+.rcard__ava--kulikova{ object-position:55% 44%; transform:scale(2.2); transform-origin:55% 45%; }
 .rcard__name{ font-size:17px; font-weight:800; }
 .rcard__quote{ font-size:16px; line-height:1.5; font-weight:700; color:var(--pink); }
 .rcard blockquote{ font-size:14.5px; line-height:1.6; color:var(--ink-soft); }
@@ -621,11 +627,22 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   }
 }
 @media (max-width:900px){
-  .program__grid{ grid-template-columns:1fr; }
+  /* Гармошка: сетка становится столбцом, список вкладок «растворяется»
+     (display:contents), и панель через order встаёт прямо под выбранной
+     вкладкой. На десктопе список остаётся обычным элементом, чтобы
+     role="tablist" не терялся для скринридеров. */
+  .program__grid{ display:flex; flex-direction:column; gap:8px; }
+  .program__tabs{ display:contents; }
+  .program__panel{ min-height:0; margin:4px 0 12px; }
 }
 @media (max-width:860px){
   .topbar__nav{ display:none; }
   .burger{ display:grid; }
+}
+@media (max-width:760px){
+  /* логотип упирался в края — на узких экранах кегль задаём от ширины */
+  .hero__logo{ font-size:30vw; }
+  .hero__start{ font-size:10px; }
 }
 @media (max-width:640px){
   .hero__start{
@@ -637,6 +654,13 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 @media (max-width:560px){
   .features__grid{ grid-template-columns:1fr; }
+  /* кнопки в столбик и на всю ширину — иначе рвут строку */
+  .hero__cta,.questions__cta{ flex-direction:column; align-items:stretch; }
+  .hero__cta > .btn,.questions__cta > .btn{ width:100%; justify-content:center; text-align:center; }
+}
+@media (max-width:430px){
+  .hero__logo{ font-size:29vw; }
+  .hero__start{ font-size:9px; }
 }
 @media (max-width:520px){
   .topbar__cta{ display:none; }
