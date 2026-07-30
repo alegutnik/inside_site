@@ -21,10 +21,19 @@
   --gold-ink:   #8A6A3A;
   --gold:       #C89A4A;
 
-  /* Типографика */
-  --font: 'League Spartan', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Типографика.
+     ВАЖНО: League Spartan не содержит кириллицы (только латиница, latin-ext
+     и вьетнамский). Поэтому украинский текст на сайте рисуется системным
+     шрифтом: Segoe UI на Windows, SF Pro на Mac, Roboto на Android.
+     League Spartan реально работает только на «INSIDE», SILVER, GOLD, Basic. */
+  --font:      'League Spartan', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Геометрия */
+  /* Кегль логотипа вынесен в переменную: от него считается отступ
+     до текста под ним (см. .hero__lead). */
+  --logo-fs: clamp(60px, calc(35.8vw - 14.3px), 416px);
+
   --wrap:        1180px;
   --wrap-narrow: 820px;
   --pad-section: clamp(64px, 8vw, 116px);
@@ -51,9 +60,13 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 
 .wrap{ width:100%; max-width:var(--wrap); margin-inline:auto; padding-inline:20px; }
 .wrap--narrow{ max-width:var(--wrap-narrow); }
-.wrap--video{ max-width:1060px; }
-/* «Zoom» набран чуть крупнее — так решено в макете */
-.zoomword{ font-size:1.09em; letter-spacing:.005em; }
+.wrap--video{ max-width:1180px; }
+
+/* League Spartan не содержит кириллицы — украинский текст рендерится
+   подстановочным шрифтом. Из-за этого латинское «Zoom» набиралось другой
+   гарнитурой и выглядело мельче соседних слов, хотя по высоте прописных
+   было даже крупнее. Принудительно ставим ту же гарнитуру, что у текста. */
+.zoomword{ font-family:var(--font-text); }
 .pink{ color:var(--pink); }
 .dim{ color:rgba(255,255,255,.55); }
 
@@ -211,7 +224,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .hero__logo{
   display:inline-block; position:relative;
   margin:0 -.0408em 0 -.047em;
-  font-size:clamp(60px, calc(35.8vw - 14.3px), 416px);
+  font-size:var(--logo-fs);
   font-weight:700; line-height:.78; letter-spacing:-.025em;
   color:var(--pink);
 }
@@ -227,8 +240,16 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 .hero__start b{ color:var(--ink); font-weight:800; }
 
+/* Под базовой линией логотипа внутри его строки остаётся пустота
+   (полулидинг + место под нижние выносные). Замерено: 120px при кегле 416px —
+   именно она читалась как «дыра» и оптически поднимала весь блок вверх.
+   Отрицательными полями логотипа её не убрать: метрики inline-block
+   упираются в пол. Поэтому вычитаем её здесь, блочным отступом, и задаём
+   желаемый зазор явно — он масштабируется вместе с логотипом. */
 .hero__lead{
-  max-width:720px; margin:clamp(10px,1.6vw,22px) auto 0;
+  max-width:720px;
+  margin-top:calc(clamp(20px, .11 * var(--logo-fs), 48px) - .288 * var(--logo-fs));
+  margin-inline:auto; margin-bottom:0;
   text-align:center;
   font-size:clamp(16px,1.55vw,21px); line-height:1.5;
   color:var(--ink-2);
@@ -364,10 +385,14 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 .photosec .wrap{ position:relative; }
 
 .questions__inner{ text-align:center; }
+/* фон с вопросительными знаками глушим сильнее остальных — на нём текст */
+.questions .photosec__bg{ filter:brightness(.24) saturate(.7); }
 .qcard{
-  background:rgba(26,21,24,.58);
-  border:1px solid rgba(255,255,255,.2);
-  backdrop-filter:blur(22px) saturate(1.1); -webkit-backdrop-filter:blur(22px) saturate(1.1);
+  /* сильное размытие + плотная подложка: на фоне с вопросительными знаками
+     текст иначе не читается */
+  background:rgba(26,21,24,.74);
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(34px) saturate(1.15); -webkit-backdrop-filter:blur(34px) saturate(1.15);
   border-radius:26px; padding:clamp(26px,3.4vw,40px);
   display:flex; flex-direction:column; gap:16px;
   text-align:left; font-size:15.5px; line-height:1.6;
@@ -390,8 +415,13 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   padding:30px 28px 32px;
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.fcard:hover,
+/* is-near ставит скрипт — карточка, ближайшая к центру экрана.
+   Ховер отдаём только мыши: на тач-экранах он залипает после касания
+   и спорит с автоподсветкой. */
 .fcard.is-near{ transform:translateY(-6px); box-shadow:0 22px 44px rgba(26,21,24,.09); border-color:#FFC9DA; }
+@media (hover:hover){
+  .fcard:hover{ transform:translateY(-6px); box-shadow:0 22px 44px rgba(26,21,24,.09); border-color:#FFC9DA; }
+}
 .fcard__ico{
   display:grid; place-items:center;
   width:52px; height:52px; border-radius:50%;
@@ -641,29 +671,29 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
 }
 @media (max-width:760px){
   /* логотип упирался в края — на узких экранах кегль задаём от ширины */
-  .hero__logo{ font-size:30vw; }
+  :root{ --logo-fs:30vw; }
   .hero__start{ font-size:10px; }
 }
 @media (max-width:640px){
-  .hero__start{
-    position:static; display:inline-block; transform:none;
-    margin-top:14px; padding:.4em .7em; box-shadow:none;
-  }
-  .hero__cta .btn{ width:100%; }
   .tcard__crown{ align-self:center; }
 }
 @media (max-width:560px){
   .features__grid{ grid-template-columns:1fr; }
-  /* кнопки в столбик и на всю ширину — иначе рвут строку */
+  /* Кнопки в столбик и строго одной ширины: без align-items:stretch
+     флекс жмёт каждую по её тексту, и они выходили разной длины. */
   .hero__cta,.questions__cta{ flex-direction:column; align-items:stretch; }
-  .hero__cta > .btn,.questions__cta > .btn{ width:100%; justify-content:center; text-align:center; }
-}
-@media (max-width:430px){
-  .hero__logo{ font-size:29vw; }
-  .hero__start{ font-size:9px; }
+  .hero__cta > .btn,
+  .questions__cta > .btn{
+    width:100%; max-width:none;
+    justify-content:center; text-align:center;
+  }
 }
 @media (max-width:520px){
   .topbar__cta{ display:none; }
+}
+@media (max-width:430px){
+  :root{ --logo-fs:29vw; }
+  .hero__start{ font-size:9px; }
 }
 
 @media (prefers-reduced-motion:reduce){

@@ -110,6 +110,7 @@
 
     var active = 0;
     var tabs = [];
+    var userPicked = false;   /* чтобы не скроллить при первой отрисовке */
 
     MODULES.forEach(function (m, i) {
       var b = document.createElement('button');
@@ -134,7 +135,7 @@
 
       b.appendChild(n);
       b.appendChild(t);
-      b.addEventListener('click', function () { select(i); });
+      b.addEventListener('click', function () { userPicked = true; select(i); });
       b.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
         e.preventDefault();
@@ -178,6 +179,20 @@
       }
 
       if (m.milestone) panel.appendChild(el('p', 'ppanel__milestone', m.milestone));
+
+      /* На мобильном панель встаёт гармошкой под выбранной вкладкой.
+         Если она вылезла за низ экрана — аккуратно подтягиваем в кадр,
+         чтобы не приходилось искать текст прокруткой. */
+      if (userPicked && window.matchMedia('(max-width:900px)').matches) {
+        requestAnimationFrame(function () {
+          var r = panel.getBoundingClientRect();
+          var bottomLimit = window.innerHeight - 90;   /* запас под липкую кнопку */
+          if (r.top < 80 || r.bottom > bottomLimit) {
+            var y = window.scrollY + r.top - 96;       /* запас под верхнюю панель */
+            window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+          }
+        });
+      }
 
       track('ProgramTab', { block: m.n });
     }
