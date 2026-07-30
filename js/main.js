@@ -135,11 +135,16 @@
 
       b.appendChild(n);
       b.appendChild(t);
-      b.addEventListener('click', function () { userPicked = true; select(i); });
+      /* повторный клик по открытой вкладке — закрывает её */
+      b.addEventListener('click', function () {
+        userPicked = true;
+        if (active === i) showPlaceholder(); else select(i);
+      });
       b.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
         e.preventDefault();
         var next = (i + (e.key === 'ArrowDown' ? 1 : MODULES.length - 1)) % MODULES.length;
+        userPicked = true;
         select(next);
         tabs[next].focus();
       });
@@ -147,6 +152,20 @@
       tabsBox.appendChild(b);
       tabs.push(b);
     });
+
+    /* Ничего не выбрано: панель показывает подсказку, все вкладки закрыты. */
+    function showPlaceholder() {
+      active = -1;
+      tabs.forEach(function (b) {
+        b.setAttribute('aria-selected', 'false');
+        b.tabIndex = 0;
+      });
+      panel.removeAttribute('aria-labelledby');
+      panel.style.order = tabs.length * 2 + 1;
+      panel.innerHTML = '';
+      panel.classList.add('is-empty');
+      panel.appendChild(el('p', 'ppanel__hint', 'Обери блок зі списку — і побач, що всередині.'));
+    }
 
     function select(i) {
       active = i;
@@ -160,6 +179,7 @@
 
       panel.setAttribute('aria-labelledby', tabs[i].id);
       panel.style.order = i * 2 + 1;
+      panel.classList.remove('is-empty');
       panel.innerHTML = '';
 
       panel.appendChild(el('p', 'ppanel__kicker', 'Блок ' + m.n + ' з ' + MODULES.length));
@@ -204,7 +224,7 @@
       return e;
     }
 
-    select(0);
+    showPlaceholder();
   })();
 
   /* ============================================================
@@ -212,7 +232,18 @@
      ============================================================ */
   var reveals = $$('[data-reveal]');
 
-  function show(el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+  /* Показ блока. Важно: inline-стиль сильнее любого CSS, поэтому после
+     завершения перехода inline transform и transition СНИМАЮТСЯ — иначе они
+     навсегда блокируют :hover у карточек (тарифы переставали приподниматься
+     и только подсвечивались). */
+  function show(el) {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+    setTimeout(function () {
+      el.style.transform = '';
+      el.style.transition = '';
+    }, 1000);
+  }
 
   if (reduced || !reveals.length) {
     reveals.forEach(show);
@@ -346,6 +377,14 @@
   var sticky = $('#stickybar');
   var lastY = 0;
 
+  /* Пока идёт плавный прыжок по якорю из самой панели, не прячем её:
+     иначе scroll-padding-top рассчитан на видимую панель, а она
+     уезжает — и якорь «промахивается» на её высоту. */
+  var keepBarUntil = 0;
+  $$('#topbar a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function () { keepBarUntil = Date.now() + 1200; });
+  });
+
   function onScroll() {
     if (window.__geoReveal) window.__geoReveal();
     if (syncHighlight) syncHighlight();
@@ -357,7 +396,7 @@
       var past = y > window.innerHeight * 0.7;
       var menuOpen = menu && !menu.hidden;
       if (!past) topbar.style.transform = 'translateY(-100%)';
-      else if (menuOpen || y < lastY - 4) topbar.style.transform = 'translateY(0)';
+      else if (menuOpen || y < lastY - 4 || Date.now() < keepBarUntil) topbar.style.transform = 'translateY(0)';
       else if (y > lastY + 4) { topbar.style.transform = 'translateY(-100%)'; closeMenu(); }
     }
     if (Math.abs(y - lastY) > 4) lastY = y;
