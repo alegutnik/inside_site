@@ -132,9 +132,16 @@
       n.className = 'ptab__n';
       n.textContent = m.n;
 
+      /* Заголовок кладём внутрь вложенного span, а сам .ptab__title
+         хранит текст в data-text: CSS рисует поверх невидимую жирную
+         копию и резервирует под неё высоту. Иначе при выборе вкладки
+         текст жирнеет, становится шире и перескакивает на вторую строку. */
       var t = document.createElement('span');
       t.className = 'ptab__title';
-      t.textContent = m.title;
+      t.dataset.text = m.title;
+      var tInner = document.createElement('span');
+      tInner.textContent = m.title;
+      t.appendChild(tInner);
 
       /* order нужен для мобильной гармошки: вкладки чётные, панель
          встаёт на нечётный сразу за выбранной. На десктопе не влияет. */

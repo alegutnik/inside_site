@@ -592,7 +592,19 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   background:var(--pink-soft); color:var(--pink-deep);
 }
 .ptab[aria-selected="true"] .ptab__n{ background:var(--pink); color:#fff; }
-.ptab__title{ flex:1; line-height:1.3; }
+/* Место под жирное начертание резервируется всегда: невидимая копия
+   заголовка при weight 800 лежит в той же ячейке грида и задаёт высоту.
+   Без этого выбранная вкладка жирнела, текст становился шире и
+   перескакивал на вторую строку — вкладка «прыгала». */
+.ptab__title{ flex:1; line-height:1.3; display:grid; }
+.ptab__title > span{ grid-area:1/1; }
+.ptab__title::before{
+  content:attr(data-text);
+  grid-area:1/1;
+  font-weight:800;
+  visibility:hidden;
+  pointer-events:none;
+}
 
 .program__panel{
   /* прибита во вторую колонку на всю высоту списка вкладок;
