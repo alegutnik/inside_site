@@ -270,7 +270,11 @@
       opts.forEach(function (o) {
         var on = o.dataset.tariff === name;
         o.setAttribute('aria-checked', on ? 'true' : 'false');
-        if (on) { found = true; if (label) label.textContent = o.textContent.trim(); }
+        if (!on) return;
+        found = true;
+        if (label) label.textContent = o.textContent.trim();
+        /* кнопка брони ведёт на предоплату именно выбранного тарифа */
+        if (btn && o.dataset.deposit) btn.href = o.dataset.deposit;
       });
       if (found && btn) btn.dataset.tariff = name;
       return found;

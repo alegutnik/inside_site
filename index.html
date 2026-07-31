@@ -29,7 +29,7 @@
 
 <!-- ?v= — метка версии. Меняешь css/js — увеличь число,
      иначе у посетителей останется старая версия из кэша браузера. -->
-<link rel="stylesheet" href="css/style.css?v=37">
+<link rel="stylesheet" href="css/style.css?v=38">
 <script>document.documentElement.classList.add('js');</script>
 
 <!-- ============================================================
@@ -230,7 +230,7 @@
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>3 місяці</b> доступу до матеріалів</span></li>
         </ul>
         <p class="tcard__price"><span class="sr-only">Стара ціна</span><span class="tcard__old">510€</span><span class="sr-only">Ціна передзапису</span><span class="tcard__new">398€</span></p>
-        <a href="#booking" class="tcard__btn tcard__btn--dark" data-pick="basic" data-cta="tariff-basic">Предзапис</a>
+        <a href="https://secure.wayforpay.com/button/b347f0205af1f" rel="noopener" class="tcard__btn tcard__btn--dark" data-cta="tariff-basic">Предзапис</a>
       </article>
 
       <article class="tcard tcard--silver" data-reveal>
@@ -246,7 +246,7 @@
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span><b>6 місяців</b> доступу до матеріалів</span></li>
         </ul>
         <p class="tcard__price"><span class="sr-only">Стара ціна</span><span class="tcard__old">618€</span><span class="sr-only">Ціна передзапису</span><span class="tcard__new">448€</span></p>
-        <a href="#booking" class="tcard__btn tcard__btn--pink" data-pick="silver" data-cta="tariff-silver">Предзапис</a>
+        <a href="https://secure.wayforpay.com/button/bfc4c44dbad8d" rel="noopener" class="tcard__btn tcard__btn--pink" data-cta="tariff-silver">Предзапис</a>
       </article>
 
       <article class="tcard tcard--gold" data-reveal>
@@ -258,7 +258,7 @@
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12.5 5 5L20 6"/></svg><span>Ти отримаєш розгорнутий фідбек <b>особисто від мене</b> на всі домашні завдання</span></li>
         </ul>
         <p class="tcard__price"><span class="sr-only">Стара ціна</span><span class="tcard__old">1188€</span><span class="sr-only">Ціна передзапису</span><span class="tcard__new">898€</span></p>
-        <a href="#booking" class="tcard__btn tcard__btn--dark" data-pick="gold" data-cta="tariff-gold">Предзапис</a>
+        <a href="https://secure.wayforpay.com/button/b179348dae0ce" rel="noopener" class="tcard__btn tcard__btn--dark" data-cta="tariff-gold">Предзапис</a>
       </article>
 
     </div>
@@ -282,16 +282,15 @@
     <div class="picker" data-reveal>
       <p class="picker__label" id="pickerLabel">Який тариф бронюємо?</p>
       <div class="picker__opts" role="radiogroup" aria-labelledby="pickerLabel">
-        <button type="button" class="picker__opt" role="radio" aria-checked="false" data-tariff="basic">BASIC</button>
-        <button type="button" class="picker__opt" role="radio" aria-checked="true"  data-tariff="silver">SILVER</button>
-        <button type="button" class="picker__opt" role="radio" aria-checked="false" data-tariff="gold">GOLD</button>
+        <button type="button" class="picker__opt" role="radio" aria-checked="false" data-tariff="basic"  data-deposit="https://secure.wayforpay.com/button/bc159d44087ee">BASIC</button>
+        <button type="button" class="picker__opt" role="radio" aria-checked="true"  data-tariff="silver" data-deposit="https://secure.wayforpay.com/button/b502f91c566df">SILVER</button>
+        <button type="button" class="picker__opt" role="radio" aria-checked="false" data-tariff="gold"   data-deposit="https://secure.wayforpay.com/button/b49faae7d13ef">GOLD</button>
       </div>
     </div>
 
     <div class="questions__cta">
-      <!-- href подставить, когда появятся ссылки оплаты:
-           REPLACE-payment-deposit-basic / -silver / -gold -->
-      <a href="#REPLACE-payment-deposit" class="btn btn--pink" id="bookBtn" data-cta="deposit">
+      <!-- href меняется скриптом на предоплату выбранного тарифа -->
+      <a href="https://secure.wayforpay.com/button/b502f91c566df" rel="noopener" class="btn btn--pink" id="bookBtn" data-cta="deposit">
         Забронювати <span id="bookTariff">SILVER</span> за 888 грн
       </a>
       <a href="https://t.me/anastasikarimova" target="_blank" rel="noopener" class="btn btn--outline-light" data-cta="support-1">
@@ -607,6 +606,6 @@
   </a>
 </div>
 
-<script src="js/main.js?v=37" defer></script>
+<script src="js/main.js?v=38" defer></script>
 </body>
 </html>
