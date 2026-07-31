@@ -29,7 +29,7 @@
 
 <!-- ?v= — метка версии. Меняешь css/js — увеличь число,
      иначе у посетителей останется старая версия из кэша браузера. -->
-<link rel="stylesheet" href="css/style.css?v=38">
+<link rel="stylesheet" href="css/style.css?v=39">
 <script>document.documentElement.classList.add('js');</script>
 
 <!-- ============================================================
@@ -386,10 +386,14 @@
       <div class="how__side" data-reveal>
         <div class="phone" id="phoneMock">
           <div class="phone__screen">
-            <video class="phone__video" src="assets/video/platform.mp4"
+            <!-- WebM меньше весит, но не играет на старых iPhone —
+                 браузер сам возьмёт MP4, если WebM не поддерживает -->
+            <video class="phone__video"
                    autoplay muted loop playsinline preload="metadata"
-                   aria-label="Демонстрація платформи INSIDE"></video>
-            <span class="phone__notch" aria-hidden="true"></span>
+                   aria-label="Демонстрація платформи INSIDE">
+              <source src="assets/video/platform.webm" type="video/webm">
+              <source src="assets/video/platform.mp4" type="video/mp4">
+            </video>
             <span class="phone__glare" aria-hidden="true"></span>
           </div>
         </div>
@@ -606,6 +610,6 @@
   </a>
 </div>
 
-<script src="js/main.js?v=38" defer></script>
+<script src="js/main.js?v=39" defer></script>
 </body>
 </html>

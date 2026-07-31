@@ -556,10 +556,7 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   border-radius:30px; background:#000;
 }
 .phone__video{ width:100%; height:100%; display:block; object-fit:cover; }
-.phone__notch{
-  position:absolute; top:9px; left:50%; transform:translateX(-50%);
-  width:31%; height:22px; border-radius:999px; background:#000;
-}
+/* Чёлку рамки убрали: она уже есть в самом видео, получалось две подряд. */
 .phone__glare{
   position:absolute; inset:0; pointer-events:none;
   background:linear-gradient(112deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 26%, rgba(255,255,255,0) 46%);
