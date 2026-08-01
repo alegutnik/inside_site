@@ -795,15 +795,36 @@ svg{ fill:none; stroke:currentColor; stroke-width:2.75; stroke-linecap:round; st
   .program__grid{ display:flex; flex-direction:column; gap:8px; }
   .program__tabs{ display:contents; }
   .program__panel{ min-height:0; margin:4px 0 12px; }
+  /* Пустая панель на мобильном не нужна: подсказка «обери блок» уже
+     стоит под заголовком, вторая такая же выглядела дублем. */
+  .program__panel.is-empty{ display:none; }
 }
 @media (max-width:860px){
-  .topbar__nav{ display:none; }
-  .burger{ display:grid; }
+  /* Вместо бургера — три главных раздела прямо в шапке: так до тарифов
+     и отзывов один тап, а не два. «Всередині» убираем, чтобы влезло. */
+  .topbar__inner{ gap:10px; padding-inline:14px; }
+  .topbar__logo{ font-size:18px; }
+  .topbar__nav{
+    display:flex; gap:clamp(10px,3.4vw,18px); margin-left:auto;
+    font-size:clamp(10px,2.9vw,12px); letter-spacing:.03em;
+  }
+  .topbar__nav a[data-nav="about"]{ display:none; }
+  .topbar__cta{ display:none; }
 }
 @media (max-width:760px){
   /* логотип упирался в края — на узких экранах кегль задаём от ширины */
   :root{ --logo-fs:33vw; }
-  .hero__start{ font-size:10px; }
+  /* Розовую подложку убираем: при читаемом кегле плашка вдвое шире
+     буквы «E» (замерено: 105px против 65px) и залезала в «дырку» буквы
+     «D» — там она видна прямоугольником поверх светлого фона. Без
+     подложки текст ложится прямо на буквы, поэтому делаем его тёмным:
+     он контрастен и на розовом, и на просветах. */
+  .hero__start{
+    font-size:10px;
+    background:none; box-shadow:none; padding:0;
+    color:var(--ink);
+  }
+  .hero__start b{ color:var(--ink); }
 }
 @media (max-width:640px){
   .tcard__crown{ align-self:center; }
